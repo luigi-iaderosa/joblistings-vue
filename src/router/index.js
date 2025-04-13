@@ -5,7 +5,9 @@ import NotFoundView from '@/views/NotFoundView.vue';
 import JobView from '@/views/JobView.vue';
 import AddJobView from '@/views/AddJobView.vue';
 import EditJob from '@/views/EditJobView.vue';
-import DeleteJob from '@/views/DeleteJobView.vue'
+import DeleteJob from '@/views/DeleteJobView.vue';
+import CompaniesView from '@/views/CompaniesView.vue';
+import EditCompanyView from '@/views/EditCompanyView.vue'
 const router = createRouter(
     {
         history: createWebHistory(import.meta.env.BASE_URL),
@@ -40,7 +42,16 @@ const router = createRouter(
                     name: 'delete-job',
                     component: DeleteJob
                 },
-                
+                {
+                    path: '/companies',
+                    name: 'companies',
+                    component: CompaniesView
+                },
+                {
+                    path: '/companies/edit/:id',
+                    name: 'edit-company',
+                    component: EditCompanyView
+                },
                 {
                     path: '/:catchAll(.*)',
                     name: 'not-found',
