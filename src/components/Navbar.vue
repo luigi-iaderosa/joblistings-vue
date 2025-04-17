@@ -2,10 +2,54 @@
 import { RouterLink } from 'vue-router';
 import logo from '@/assets/logo.png';
 import { useRoute } from 'vue-router';
+import { onMounted } from 'vue';
+import { reactive } from 'vue';
+import router from '@/router';
+import eventBus from '@/eventBus';
 
 const isActiveLink = (routePath) => {
   console.log()
   return useRoute().path === routePath;
+}
+
+const userProps = reactive({
+  user_id : null,
+  user_name: null,
+  token: null,
+  authorized: false
+})
+
+var props = defineProps({
+  authorized : {
+    type: Boolean
+  }
+});
+
+
+const fillUserProps = () => {
+  userProps.user_id = localStorage.getItem('user_id');
+  userProps.user_name = localStorage.getItem('user');
+  userProps.token = localStorage.getItem('token');
+  
+  if (userProps.user_id!=null){
+    userProps.authorized = true;
+    props.authorized = true;
+  }
+  console.log(userProps);
+}
+
+onMounted(()=>{
+  fillUserProps();
+  eventBus.on('LoginOccurredEvent',fillUserProps)
+});
+
+const logout = () => {
+  localStorage.removeItem('user_id');
+  localStorage.removeItem('user');
+  localStorage.removeItem('token');
+  eventBus.emit('LogoutOccurredEvent');
+  props.authorized = false;
+  router.push('/welcome');
 }
 </script>
 
@@ -22,7 +66,8 @@ const isActiveLink = (routePath) => {
               <span class="hidden md:block text-white text-2xl font-bold ml-2"
                 >Vue Jobs</span>
             </RouterLink>
-            <div class="md:ml-auto">
+            
+            <div v-if="userProps.authorized==true" class="md:ml-auto">
               <div class="flex space-x-2">
                 <RouterLink
                   to="/"
@@ -44,8 +89,13 @@ const isActiveLink = (routePath) => {
                     to="/companies"
                     :class= "[isActiveLink('/companies')?'bg-green-900': 'hover:bg-gray-900 hover:text-white', 'text-white','rounded-md', 'px-3', 'py-2']"
                   >Companies</RouterLink>
+                  <button @click="logout"
+                    class = "text-white rounded-md px-3 py-2 hover:bg-gray-900 hover:text-white">
+                    Logout
+                  </button>
               </div>
             </div>
+            <div v-else><div class="flex space-x-2"><div class="text-white">Actions not available (yet)</div></div></div>
           </div>
         </div>
       </div>

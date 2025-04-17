@@ -7,11 +7,18 @@ import AddJobView from '@/views/AddJobView.vue';
 import EditJob from '@/views/EditJobView.vue';
 import DeleteJob from '@/views/DeleteJobView.vue';
 import CompaniesView from '@/views/CompaniesView.vue';
-import EditCompanyView from '@/views/EditCompanyView.vue'
+import EditCompanyView from '@/views/EditCompanyView.vue';
+import WelcomeView from '@/views/WelcomeView.vue';
 const router = createRouter(
     {
         history: createWebHistory(import.meta.env.BASE_URL),
-        routes: [{
+        routes: [
+                {
+                    path:'/welcome',
+                    name: 'welcome',
+                    component: WelcomeView
+                },
+                {
                     path: '/',
                     name: 'home',
                     component: HomeView
