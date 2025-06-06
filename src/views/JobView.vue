@@ -3,7 +3,8 @@ import { onMounted } from 'vue';
 import { reactive } from 'vue';
 import { RouterLink,useRoute } from 'vue-router';
 import axios from 'axios';
-
+import router from '@/router';
+import { API_LINK } from '@/plugins/Constants';
 
 const state = reactive({
     job : {},
@@ -11,13 +12,38 @@ const state = reactive({
     isLoading : true
 });
 
+const userProps = reactive({
+  user_id : null,
+  user_name: null,
+  token: null,
+  authorized: false
+})
+
+const fillUserProps = () => {
+  userProps.user_id = localStorage.getItem('user_id');
+  userProps.user_name = localStorage.getItem('user');
+  userProps.token = localStorage.getItem('token');
+  
+  if (userProps.user_id!=null){
+    userProps.authorized = true;
+  }
+  else {
+    userProps.authorized = false;
+  }
+  console.log(userProps);
+}
+
+
 onMounted(async ()=>{
+    fillUserProps();
     const jobId = useRoute().params.id; //se vai in router.js, la rotta che invoca questa view ha come parametro "id"
-    const response = await axios.get(`http://localhost:9000/jobs/${jobId}`); // ricorda: i backtick rendono la stringa "evaluable as javascript"!
+    const response = await axios.get(API_LINK+'/jobs/'+jobId,{headers: {'Authorization':'Bearer '+userProps.token}}); // ricorda: i backtick rendono la stringa "evaluable as javascript"!
     state.isLoading = false;
     state.job = response.data;
     state.company = response.data.company;
-    console.log(response.data)
+    if (userProps.authorized == false){
+      router.push('/welcome');
+    }
 });
 
 </script>
@@ -85,23 +111,23 @@ onMounted(async ()=>{
               <h3 class="text-xl">Contact Email:</h3>
 
               <p class="my-2 bg-green-100 p-2 font-bold">
-                {{ state.company.contactEmail }}
+                {{ state.company.contact_email }}
               </p>
 
               <h3 class="text-xl">Contact Phone:</h3>
 
-              <p class="my-2 bg-green-100 p-2 font-bold">{{ state.company.contactPhone }}</p>
+              <p class="my-2 bg-green-100 p-2 font-bold">{{ state.company.contact_phone }}</p>
             </div>
 
             <!-- Manage -->
             <div class="bg-white p-6 rounded-lg shadow-md mt-6">
               <h3 class="text-xl font-bold mb-6">Manage Job</h3>
               <RouterLink
-                :to="`/jobs/edit/${state.job.id}`"
+                :to="`/jobs/edit/${state.job.id_job}`"
                 class="bg-green-500 hover:bg-green-600 text-white text-center font-bold py-2 px-4 rounded-full w-full focus:outline-none focus:shadow-outline mt-4 block"
                 >Edit Job</RouterLink>
               <RouterLink 
-              :to="`/jobs/delete/${state.job.id}`"
+              :to="`/jobs/delete/${state.job.id_job}`"
                 class="bg-red-500 hover:bg-red-600 text-white text-center font-bold py-2 px-4 rounded-full w-full focus:outline-none focus:shadow-outline mt-4 block"
               >
                 Delete Job

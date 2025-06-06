@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "server": "json-server --watch src/jobs.json --port 9000"
+    "server-jobs": "json-server --watch src/jobs.json --port 9000",
+    "server-companies": "json-server --watch src/companies.json --port 9001"
   },
   "dependencies": {
     "@tailwindcss/postcss": "^4.0.12",
@@ -15,6 +16,7 @@
     "autoprefixer": "^10.4.20",
     "axios": "^1.8.3",
     "json-server": "^1.0.0-beta.3",
+    "mitt": "^3.0.1",
     "postcss": "^8.5.3",
     "primeicons": "^7.0.0",
     "tailwindcss": "^4.0.12",

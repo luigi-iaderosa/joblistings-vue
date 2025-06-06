@@ -4,6 +4,8 @@ import router from '@/router';
 import axios from 'axios';
 import { useRoute } from 'vue-router';
 import {useToast} from 'vue-toastification';
+import { onMounted } from 'vue';
+import { API_LINK } from '@/plugins/Constants';
 
 const form = reactive({
     type: 'Remote',
@@ -11,29 +13,66 @@ const form = reactive({
     description:'',
     salary:'Over $200K',
     location:'',
-    company: {
-        name: '',
-        description: '',
-        contactEmail:'',
-        contactPhone: '',
-    }
+    company_id:null
 });
+const userProps = reactive({
+        user_id : null,
+        user_name: null,
+        token: null,
+        authorized: false
+    })
+
+const fillUserProps = () => {
+    userProps.user_id = localStorage.getItem('user_id');
+    userProps.user_name = localStorage.getItem('user');
+    userProps.token = localStorage.getItem('token');
+    
+    if (userProps.user_id!=null){
+        userProps.authorized = true;
+    }
+    else {
+        userProps.authorized = false;
+    }
+    console.log(userProps);
+}
 
 const toast = useToast();
-
+const remoteData = reactive({
+  companies:[]
+})
 const handleSubmit = async () => {
     try {
-        const response = await axios.post('http://localhost:9000/jobs',form);
-        toast.success('Job Added!');
-        router.push(`/jobs/${response.data.id}`);
+      
+      
+      const response = await axios.post(API_LINK+'/jobs',form,{
+          headers: {'Authorization':'Bearer '+userProps.token}
+        });
+      toast.success('Job Added!');
+      router.push('/jobs');
+      console.log(form,response);
     }
     catch(error){
         toast.error('Job Not Added!');
         console.error('Error fetching job', error);
     }
-    
-
 }
+
+onMounted(async () => {
+  fillUserProps();
+  if (userProps.authorized ==false){
+    router.push('/welcome');
+  }
+  else {
+    try {
+      const response = await axios.get(API_LINK+'/companies',{headers: {'Authorization':'Bearer '+userProps.token}});
+      remoteData.companies = response.data.data;
+      console.log(remoteData.companies);
+    }
+    catch(error){
+      console.error(error);
+    }
+  }
+});
 
 </script>
 <template>
@@ -139,62 +178,10 @@ const handleSubmit = async () => {
               <label for="company" class="block text-gray-700 font-bold mb-2"
                 >Company Name</label
               >
-              <input
-                type="text"
-                id="company"
-                v-model="form.company.name"
-                name="company"
-                class="border rounded w-full py-2 px-3"
-                placeholder="Company Name"
-              />
-            </div>
 
-            <div class="mb-4">
-              <label
-                for="company_description"
-                class="block text-gray-700 font-bold mb-2"
-                >Company Description</label
-              >
-              <textarea
-                id="company_description"
-                name="company_description"
-                v-model="form.company.description"
-                class="border rounded w-full py-2 px-3"
-                rows="4"
-                placeholder="What does your company do?"
-              ></textarea>
-            </div>
-
-            <div class="mb-4">
-              <label
-                for="contact_email"
-                class="block text-gray-700 font-bold mb-2"
-                >Contact Email</label
-              >
-              <input
-                type="email"
-                id="contact_email"
-                name="contact_email"
-                v-model="form.company.contactEmail"
-                class="border rounded w-full py-2 px-3"
-                placeholder="Email address for applicants"
-                required
-              />
-            </div>
-            <div class="mb-4">
-              <label
-                for="contact_phone"
-                class="block text-gray-700 font-bold mb-2"
-                >Contact Phone</label
-              >
-              <input
-                type="tel"
-                id="contact_phone"
-                name="contact_phone"
-                v-model="form.company.contactPhone"
-                class="border rounded w-full py-2 px-3"
-                placeholder="Optional phone for applicants"
-              />
+              <select  id="company"  name="company" class="border rounded w-full py-2 px-3"  v-model="form.company_id">
+                <option v-for="company in remoteData.companies" :value=company.id_company>{{company.name}}</option>
+              </select>
             </div>
 
             <div>

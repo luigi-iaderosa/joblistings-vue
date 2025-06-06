@@ -29,19 +29,19 @@ const fillUserProps = () => {
     console.log(userProps);
 }
 
+
+
 const handleSubmit = async() => {
-    const job = id.value;
+    const companyId = id.value;
     
-    const response = await axios.delete(API_LINK+'/jobs/'+job,{
-          headers: {'Authorization':'Bearer '+userProps.token}
-        });
+    const response = await axios.delete(API_LINK+'/companies/'+companyId,{headers: {'Authorization':'Bearer '+userProps.token}});
     console.log(response);
-    router.push('/jobs');
+    router.push('/companies');
 }
 
 onMounted(()=>{
-  fillUserProps();
-  id.value = useRoute().params.id;
+    fillUserProps();
+    id.value = useRoute().params.id;
 });
 
 </script>
@@ -52,9 +52,9 @@ onMounted(()=>{
           class="bg-white px-6 py-8 mb-4 shadow-md rounded-md border m-4 md:m-0"
         >
           <form  @submit.prevent="handleSubmit">
-            <h2 class="text-3xl text-center font-semibold mb-6">Delete Job</h2>
+            <h2 class="text-3xl text-center font-semibold mb-6">Delete Company</h2>
 
-            <h3 class="text-2xl mb-5">Do you want to delete this job?</h3>
+            <h3 class="text-2xl mb-5">Do you want to delete this company?</h3>
             <div>
               <button
                 class="bg-green-500 hover:bg-green-600 text-white text-center font-bold py-2 px-4 rounded-full w-full focus:outline-none focus:shadow-outline"
