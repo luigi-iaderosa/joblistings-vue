@@ -5,6 +5,7 @@
     import axios from 'axios';
     import { onMounted } from 'vue';
     import PulseLoader from 'vue-spinner/src/PulseLoader.vue';
+    import {API_LINK} from '@/plugins/Constants'
     defineProps({
         limit: {
             type: Number
@@ -14,6 +15,14 @@
             default:false
         }
     });
+
+    const userProps = reactive({
+        user_id : null,
+        user_name: null,
+        token: null,
+        authorized: false
+    });
+
     /*
     const jobs = ref([]);
 
@@ -31,15 +40,47 @@
         reactive(...) accetta solo oggetti (infatti gli passiamo un JSON)
     
     */
-   const state = reactive({
+    const state = reactive({
     jobs : [],
     isLoading: true
-   });    
-   onMounted(async ()=>{
-        const response = await axios.get('http://localhost:9000/jobs');
-        state.jobs = response.data;
-        setTimeout(()=>{state.isLoading = false;},2000); // questa set timeout è inutile ai fini del funzionamento, ma ci "fa vedere" il PulseLoader ;-)
-    });
+   }); 
+   
+   
+  const fillUserProps = () => {
+    userProps.user_id = localStorage.getItem('user_id');
+    userProps.user_name = localStorage.getItem('user');
+    userProps.token = localStorage.getItem('token');
+    
+    if (userProps.user_id!=null){
+        userProps.authorized = true;
+    }
+    else {
+        userProps.authorized = false;
+    }
+    console.log(userProps);
+}
+
+
+onMounted(async ()=>{
+    fillUserProps();
+    console.log(userProps);
+    console.log(userProps.authorized == false);
+    if (userProps.authorized == false){
+      router.push('/welcome');
+    }
+    else {
+        try {
+            const response = await axios.get(API_LINK+'/jobs',{headers: {'Authorization':'Bearer '+userProps.token}});
+            console.log(response.data.data);
+            state.jobs = response.data.data
+            state.isLoading = false;
+        }
+        catch(error){
+            console.error(error);
+        }
+    }
+});
+   
 </script>
 
 <template>
@@ -50,7 +91,7 @@
             </h2>
             
             <div v-if="state.isLoading===false" class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <JobListing v-for="job in state.jobs.slice(0,limit || state.jobs.length)" :key="job.id" :job="job"></JobListing>
+                <JobListing v-for="job in state.jobs.slice(0,limit || state.jobs.length)" :key="job.id_job" :job="job"></JobListing>
             </div>
             <div v-else class="text-center text-gray-500 py-6">
                 <PulseLoader></PulseLoader>

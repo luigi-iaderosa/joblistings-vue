@@ -9,13 +9,19 @@ import eventBus from '@/eventBus';
 import { onMounted } from 'vue';
 const state = reactive({
     email : null,
-    password : null
+    password : null,
+    isError : false
 });
-
 const handleSubmit = async ()=>{
-    const response = await axios.post(API_LINK+'/login',state);
-    //console.log(response)
-    const data = response.data;
+    state.isError = false;
+    const response = await axios.post(API_LINK+'/login',state).catch(function(error){
+        const status = error.response.status;
+        if (status==401){
+            state.isError = true
+        }
+    });
+    if (state.isError == false) {
+        const data = response.data;
     if (data.access_token!= undefined){
         localStorage.setItem('token', data.access_token);
         localStorage.setItem('user',data.user.name);
@@ -27,6 +33,9 @@ const handleSubmit = async ()=>{
     else {
         alert('Wrong login!!')
     }
+    }
+    
+    
 }
 </script>
 
@@ -52,12 +61,15 @@ const handleSubmit = async ()=>{
                 <form @submit.prevent="handleSubmit">
                     <label for="email" style="margin-right: 35px;">Email</label>
                     <input type="text" name="email" v-model="state.email" id="email" style="background-color: aquamarine;" /><br/>
+                    <div style="padding-top: 5px;"/>
                     <label for="password" style="margin-right: 6px;">Password</label>
                     <input type="text" name="password" id="password" v-model="state.password" style="background-color: aquamarine;"/>
                     <button class="bg-green-500 hover:bg-green-600 text-white text-center font-bold py-2 px-4 rounded-full w-full focus:outline-none focus:shadow-outline mt-4 block">Login!</button>
+                    <div v-if="state.isError==true" class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50">Login errato!</div>
                 </form>
                 
             </div>
+            
         </div>
 
     </section>

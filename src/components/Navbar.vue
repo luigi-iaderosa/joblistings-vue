@@ -19,11 +19,7 @@ const userProps = reactive({
   authorized: false
 })
 
-var props = defineProps({
-  authorized : {
-    type: Boolean
-  }
-});
+
 
 
 const fillUserProps = () => {
@@ -33,7 +29,9 @@ const fillUserProps = () => {
   
   if (userProps.user_id!=null){
     userProps.authorized = true;
-    props.authorized = true;
+  }
+  else {
+    userProps.authorized = false;
   }
   console.log(userProps);
 }
@@ -41,6 +39,7 @@ const fillUserProps = () => {
 onMounted(()=>{
   fillUserProps();
   eventBus.on('LoginOccurredEvent',fillUserProps)
+  eventBus.on('LogoutOccurredEvent',fillUserProps)
 });
 
 const logout = () => {
@@ -48,7 +47,6 @@ const logout = () => {
   localStorage.removeItem('user');
   localStorage.removeItem('token');
   eventBus.emit('LogoutOccurredEvent');
-  props.authorized = false;
   router.push('/welcome');
 }
 </script>
@@ -84,7 +82,7 @@ const logout = () => {
                   <RouterLink
                     to="/companies/add"
                     :class= "[isActiveLink('/companies/add')?'bg-green-900': 'hover:bg-gray-900 hover:text-white', 'text-white','rounded-md', 'px-3', 'py-2']"
-                  >Add Companies</RouterLink>
+                  >Add Company</RouterLink>
                   <RouterLink
                     to="/companies"
                     :class= "[isActiveLink('/companies')?'bg-green-900': 'hover:bg-gray-900 hover:text-white', 'text-white','rounded-md', 'px-3', 'py-2']"
