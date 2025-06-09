@@ -5,43 +5,25 @@ import { reactive } from 'vue';
 import { useRoute } from 'vue-router';
 import router from '@/router';
 import { API_LINK } from '@/plugins/Constants';
+import useUserStore from '@/stores/userStore';
 const state = reactive({
     company : {},
     companyId : null
 });
-const userProps = reactive({
-        user_id : null,
-        user_name: null,
-        token: null,
-        authorized: false
-    });
 
-
-const fillUserProps = () => {
-    userProps.user_id = localStorage.getItem('user_id');
-    userProps.user_name = localStorage.getItem('user');
-    userProps.token = localStorage.getItem('token');
-    
-    if (userProps.user_id!=null){
-        userProps.authorized = true;
-    }
-    else {
-        userProps.authorized = false;
-    }
-    console.log(userProps);
-}
+const userStore = useUserStore();
 
 state.companyId = useRoute().params.id;
 console.log(state.companyId);
 
 onMounted(async () => {
-    fillUserProps();
-    const response = await axios.get(API_LINK+'/companies/'+state.companyId,{headers: {'Authorization':'Bearer '+userProps.token}});
+    userStore.fillUserProps();
+    const response = await axios.get(API_LINK+'/companies/'+state.companyId,{headers: {'Authorization':'Bearer '+userStore.token}});
     state.company = response.data;
 });
 
 const handleSubmit = async () => {
-    const response = await axios.put(API_LINK+'/companies/'+state.companyId,state.company,{headers: {'Authorization':'Bearer '+userProps.token}});
+    const response = await axios.put(API_LINK+'/companies/'+state.companyId,state.company,{headers: {'Authorization':'Bearer '+userStore.token}});
     console.log(response);
     router.push('/companies')
 }

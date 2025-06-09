@@ -5,30 +5,13 @@ import JobListings from '@/components/JobListings.vue';
 import { onMounted } from 'vue';
 import router from '@/router';
 import { reactive } from 'vue';
+import useUserStore from '@/stores/userStore.js'
 
-const userProps = reactive({
-  user_id : null,
-  user_name: null,
-  token: null,
-  authorized: false
-})
-const fillUserProps = () => {
-  userProps.user_id = localStorage.getItem('user_id');
-  userProps.user_name = localStorage.getItem('user');
-  userProps.token = localStorage.getItem('token');
-  
-  if (userProps.user_id!=null){
-    userProps.authorized = true;
-  }
-  else {
-    userProps.authorized = false;
-  }
-  console.log(userProps);
-}
+const userStore = useUserStore();
 
 onMounted(()=>{
-    fillUserProps()
-    if (userProps.authorized==false){
+    userStore.fillUserProps()
+    if (userStore.authorized==false){
         router.push('/welcome');
     }
     

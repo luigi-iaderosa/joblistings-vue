@@ -6,7 +6,7 @@ import { useRoute } from 'vue-router';
 import {useToast} from 'vue-toastification';
 import { onMounted } from 'vue';
 import { API_LINK } from '@/plugins/Constants';
-
+import useUserStore from '@/stores/userStore';
 const form = reactive({
     type: 'Remote',
     name: '',
@@ -15,37 +15,21 @@ const form = reactive({
     location:'',
     company_id:null
 });
-const userProps = reactive({
-        user_id : null,
-        user_name: null,
-        token: null,
-        authorized: false
-    })
-
-const fillUserProps = () => {
-    userProps.user_id = localStorage.getItem('user_id');
-    userProps.user_name = localStorage.getItem('user');
-    userProps.token = localStorage.getItem('token');
-    
-    if (userProps.user_id!=null){
-        userProps.authorized = true;
-    }
-    else {
-        userProps.authorized = false;
-    }
-    console.log(userProps);
-}
 
 const toast = useToast();
 const remoteData = reactive({
   companies:[]
 })
+
+
+const userStore = useUserStore();
+
 const handleSubmit = async () => {
     try {
       
       
       const response = await axios.post(API_LINK+'/jobs',form,{
-          headers: {'Authorization':'Bearer '+userProps.token}
+          headers: {'Authorization':'Bearer '+userStore.token}
         });
       toast.success('Job Added!');
       router.push('/jobs');
@@ -58,13 +42,13 @@ const handleSubmit = async () => {
 }
 
 onMounted(async () => {
-  fillUserProps();
-  if (userProps.authorized ==false){
+  userStore.fillUserProps();
+  if (userStore.authorized ==false){
     router.push('/welcome');
   }
   else {
     try {
-      const response = await axios.get(API_LINK+'/companies',{headers: {'Authorization':'Bearer '+userProps.token}});
+      const response = await axios.get(API_LINK+'/companies',{headers: {'Authorization':'Bearer '+userStore.token}});
       remoteData.companies = response.data.data;
       console.log(remoteData.companies);
     }

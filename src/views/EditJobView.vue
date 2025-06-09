@@ -7,6 +7,8 @@ import { onMounted } from 'vue';
 import { ref } from 'vue';
 import { useToast } from 'vue-toastification';
 import { API_LINK } from '@/plugins/Constants';
+import useUserStore from '@/stores/userStore';
+
 
 const form = reactive({
     job_type: '',
@@ -31,31 +33,13 @@ const formInject = reactive({
 });
 
 
-const userProps = reactive({
-  user_id : null,
-  user_name: null,
-  token: null,
-  authorized: false
-})
 
 const companies = reactive({
   data: null
 })
-const fillUserProps = () => {
-  userProps.user_id = localStorage.getItem('user_id');
-  userProps.user_name = localStorage.getItem('user');
-  userProps.token = localStorage.getItem('token');
-  
-  if (userProps.user_id!=null){
-    userProps.authorized = true;
-  }
-  else {
-    userProps.authorized = false;
-  }
-  console.log(userProps);
-}
 
 
+const userStore = useUserStore();
 
 
 const handleSubmit = async () => {
@@ -67,7 +51,7 @@ const handleSubmit = async () => {
         formInject.id_company = form.id_company;
         formInject.location = form.location;
 
-        const response = axios.put(API_LINK+'/jobs/'+id.value,formInject,{headers: {'Authorization':'Bearer '+userProps.token}});
+        const response = axios.put(API_LINK+'/jobs/'+id.value,formInject,{headers: {'Authorization':'Bearer '+userStore.token}});
         const toast = useToast();
         toast.success('Job has been overwritten! Yay!');
         console.log(response);
@@ -78,9 +62,9 @@ const handleSubmit = async () => {
 
 onMounted(async () => {
     id.value = useRoute().params.id;
-    fillUserProps();
+    userStore.fillUserProps();
     const jobId = id.value;
-    const response = await axios.get(API_LINK+'/jobs/'+jobId,{headers: {'Authorization':'Bearer '+userProps.token}}); // ricorda: i backtick rendono la stringa "evaluable as javascript"!
+    const response = await axios.get(API_LINK+'/jobs/'+jobId,{headers: {'Authorization':'Bearer '+userStore.token}}); // ricorda: i backtick rendono la stringa "evaluable as javascript"!
     const data = response.data;
     form.job_type = data.job_type;
     form.name = data.name;
@@ -88,7 +72,7 @@ onMounted(async () => {
     form.salary = data.salary;
     form.id_company = data.id_company;
     form.location = data.location;
-    const companiesResponse = await axios.get(API_LINK+'/companies',{headers: {'Authorization':'Bearer '+userProps.token}}); // ricorda: i backtick rendono la stringa "evaluable as javascript"!
+    const companiesResponse = await axios.get(API_LINK+'/companies',{headers: {'Authorization':'Bearer '+userStore.token}}); // ricorda: i backtick rendono la stringa "evaluable as javascript"!
     companies.data = companiesResponse.data.data;
     console.log(companies.data)
 });
