@@ -6,41 +6,24 @@ import { onMounted } from 'vue';
 import { ref } from 'vue';
 import { reactive } from 'vue';
 import { API_LINK } from '@/plugins/Constants';
+import useUserStore from '@/stores/userStore';
 const id = ref('');
 
-const userProps = reactive({
-        user_id : null,
-        user_name: null,
-        token: null,
-        authorized: false
-    })
+const userStore = useUserStore();
 
-const fillUserProps = () => {
-    userProps.user_id = localStorage.getItem('user_id');
-    userProps.user_name = localStorage.getItem('user');
-    userProps.token = localStorage.getItem('token');
-    
-    if (userProps.user_id!=null){
-        userProps.authorized = true;
-    }
-    else {
-        userProps.authorized = false;
-    }
-    console.log(userProps);
-}
 
 
 
 const handleSubmit = async() => {
     const companyId = id.value;
     
-    const response = await axios.delete(API_LINK+'/companies/'+companyId,{headers: {'Authorization':'Bearer '+userProps.token}});
+    const response = await axios.delete(API_LINK+'/companies/'+companyId,{headers: {'Authorization':'Bearer '+userStore.token}});
     console.log(response);
     router.push('/companies');
 }
 
 onMounted(()=>{
-    fillUserProps();
+  userStore.fillUserProps();
     id.value = useRoute().params.id;
 });
 

@@ -6,38 +6,20 @@ import { onMounted } from 'vue';
 import { reactive } from 'vue';
 import router from '@/router';
 import eventBus from '@/eventBus';
+import useUserStore from '@/stores/userStore.js';
 
 const isActiveLink = (routePath) => {
   console.log()
   return useRoute().path === routePath;
 }
 
-const userProps = reactive({
-  user_id : null,
-  user_name: null,
-  token: null,
-  authorized: false
-})
-
-
-
-
 const fillUserProps = () => {
-  userProps.user_id = localStorage.getItem('user_id');
-  userProps.user_name = localStorage.getItem('user');
-  userProps.token = localStorage.getItem('token');
-  
-  if (userProps.user_id!=null){
-    userProps.authorized = true;
-  }
-  else {
-    userProps.authorized = false;
-  }
-  console.log(userProps);
+  userStore.fillUserProps();
 }
 
+const userStore = useUserStore();
 onMounted(()=>{
-  fillUserProps();
+  userStore.fillUserProps();
   eventBus.on('LoginOccurredEvent',fillUserProps)
   eventBus.on('LogoutOccurredEvent',fillUserProps)
 });
@@ -65,7 +47,7 @@ const logout = () => {
                 >Vue Jobs</span>
             </RouterLink>
             
-            <div v-if="userProps.authorized==true" class="md:ml-auto">
+            <div v-if="userStore.authorized==true" class="md:ml-auto">
               <div class="flex space-x-2">
                 <RouterLink
                   to="/"

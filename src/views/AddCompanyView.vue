@@ -4,6 +4,7 @@ import axios from 'axios';
 import { API_LINK } from '@/plugins/Constants';
 import router from '@/router';
 import { onMounted } from 'vue';
+import useUserStore from '@/stores/userStore';
 const form = new reactive({
     name:null,
     description:null,
@@ -11,36 +12,17 @@ const form = new reactive({
     contact_phone:null
 });
 
-const userProps = reactive({
-        user_id : null,
-        user_name: null,
-        token: null,
-        authorized: false
-    })
-
-const fillUserProps = () => {
-    userProps.user_id = localStorage.getItem('user_id');
-    userProps.user_name = localStorage.getItem('user');
-    userProps.token = localStorage.getItem('token');
-    
-    if (userProps.user_id!=null){
-        userProps.authorized = true;
-    }
-    else {
-        userProps.authorized = false;
-    }
-    console.log(userProps);
-}
+const userStore = useUserStore();
 
 const handleSubmit = async () =>  {
     const response = await axios.post(API_LINK+'/companies',form,{
-          headers: {'Authorization':'Bearer '+userProps.token}
+          headers: {'Authorization':'Bearer '+userStore.token}
         });
     router.push('/companies');
 }
 
 onMounted(()=>{
-    fillUserProps();
+    userStore.fillUserProps();
 
 })
 

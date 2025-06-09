@@ -5,34 +5,19 @@
     import { reactive } from 'vue';
     import router from '@/router';
     import {API_LINK} from '@/plugins/Constants'
+    import useUserStore from '@/stores/userStore';
     const state = reactive({companies: []});
-    const userProps = reactive({
-        user_id : null,
-        user_name: null,
-        token: null,
-        authorized: false
-    })
-    const fillUserProps = () => {
-        userProps.user_id = localStorage.getItem('user_id');
-        userProps.user_name = localStorage.getItem('user');
-        userProps.token = localStorage.getItem('token');
-        
-        if (userProps.user_id!=null){
-            userProps.authorized = true;
-        }
-        else {
-            userProps.authorized = false;
-        }
-        console.log(userProps);
-    }
+    
+    const userStore = useUserStore();
+
 
     onMounted(async ()=>{
-        fillUserProps()
-        if (userProps.authorized ==false){
+        userStore.fillUserProps()
+        if (userStore.authorized ==false){
             router.push('/welcome');
         }
         else {
-            const response = await axios.get(API_LINK+'/companies',{headers: {'Authorization':'Bearer '+userProps.token}});
+            const response = await axios.get(API_LINK+'/companies',{headers: {'Authorization':'Bearer '+userStore.token}});
             state.companies = response.data.data;
             console.log(state.companies);
         }

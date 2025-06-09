@@ -5,6 +5,10 @@ import { RouterLink,useRoute } from 'vue-router';
 import axios from 'axios';
 import router from '@/router';
 import { API_LINK } from '@/plugins/Constants';
+import useUserStore from '@/stores/userStore';
+
+
+const userStore = useUserStore();
 
 const state = reactive({
     job : {},
@@ -12,36 +16,17 @@ const state = reactive({
     isLoading : true
 });
 
-const userProps = reactive({
-  user_id : null,
-  user_name: null,
-  token: null,
-  authorized: false
-})
 
-const fillUserProps = () => {
-  userProps.user_id = localStorage.getItem('user_id');
-  userProps.user_name = localStorage.getItem('user');
-  userProps.token = localStorage.getItem('token');
-  
-  if (userProps.user_id!=null){
-    userProps.authorized = true;
-  }
-  else {
-    userProps.authorized = false;
-  }
-  console.log(userProps);
-}
 
 
 onMounted(async ()=>{
-    fillUserProps();
+    userStore.fillUserProps();
     const jobId = useRoute().params.id; //se vai in router.js, la rotta che invoca questa view ha come parametro "id"
-    const response = await axios.get(API_LINK+'/jobs/'+jobId,{headers: {'Authorization':'Bearer '+userProps.token}}); // ricorda: i backtick rendono la stringa "evaluable as javascript"!
+    const response = await axios.get(API_LINK+'/jobs/'+jobId,{headers: {'Authorization':'Bearer '+userStore.token}}); // ricorda: i backtick rendono la stringa "evaluable as javascript"!
     state.isLoading = false;
     state.job = response.data;
     state.company = response.data.company;
-    if (userProps.authorized == false){
+    if (userStore.authorized == false){
       router.push('/welcome');
     }
 });
