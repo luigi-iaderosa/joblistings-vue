@@ -22,17 +22,19 @@ const handleSubmit = async ()=>{
     });
     if (state.isError == false) {
         const data = response.data;
-    if (data.access_token!= undefined){
-        localStorage.setItem('token', data.access_token);
-        localStorage.setItem('user',data.user.name);
-        localStorage.setItem('user_id',data.user.id);
-        
-        eventBus.emit('LoginOccurredEvent',data);
-        router.push('/');
-    }
-    else {
-        alert('Wrong login!!')
-    }
+        console.log(data);
+        if (data.access_token!= undefined){
+            console.log(data);
+            localStorage.setItem('token', data.access_token);
+            localStorage.setItem('user',data.user.name);
+            localStorage.setItem('user_id',data.user.id);
+            localStorage.setItem('roles',data.role);
+            eventBus.emit('LoginOccurredEvent',data);
+            router.push('/');
+        }
+        else {
+            alert('Wrong login!!')
+        }
     }
     
     
