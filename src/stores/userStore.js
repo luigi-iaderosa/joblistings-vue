@@ -12,7 +12,7 @@ const useUserStore = defineStore('user', {
             this.user_id = localStorage.getItem('user_id');
             this.user_name = localStorage.getItem('user');
             this.token = localStorage.getItem('token');
-            this.roles = localStorage.getItem('roles');
+            this.roles = JSON.parse(localStorage.getItem('roles'));
             console.log(localStorage);
             if (this.user_id!=null){
                 this.authorized = true;
@@ -25,8 +25,10 @@ const useUserStore = defineStore('user', {
             //console.log(this,this.role,'hey');
             switch($path){
                 case '/jobs/add':
-                    return true;
-                    //return this.role.filter((item) => item.id_role == 1).length > 0;
+                case '/companies/add':
+                    //return true;
+                    return this.roles.filter((item) => item.id_role == 1).length > 0;
+                
                 default:
                     return false;
             }

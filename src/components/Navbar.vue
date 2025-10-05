@@ -61,7 +61,7 @@ const logout = () => {
                   to="/jobs/add" v-if="userStore.canAccessToPath('/jobs/add')"
                   :class= "[isActiveLink('/jobs/add')?'bg-green-900': 'hover:bg-gray-900 hover:text-white', 'text-white','rounded-md', 'px-3', 'py-2']"
                   >Add Job</RouterLink>
-                  <RouterLink
+                  <RouterLink  v-if="userStore.canAccessToPath('/companies/add')"
                     to="/companies/add"
                     :class= "[isActiveLink('/companies/add')?'bg-green-900': 'hover:bg-gray-900 hover:text-white', 'text-white','rounded-md', 'px-3', 'py-2']"
                   >Add Company</RouterLink>

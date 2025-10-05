@@ -24,11 +24,12 @@ const handleSubmit = async ()=>{
         const data = response.data;
         console.log(data);
         if (data.access_token!= undefined){
-            console.log(data);
+            //console.log(data);
             localStorage.setItem('token', data.access_token);
             localStorage.setItem('user',data.user.name);
             localStorage.setItem('user_id',data.user.id);
-            localStorage.setItem('roles',data.role);
+            localStorage.setItem('roles',JSON.stringify(data.role));
+            console.log(localStorage)
             eventBus.emit('LoginOccurredEvent',data);
             router.push('/');
         }
