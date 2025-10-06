@@ -1,6 +1,13 @@
 <script setup>
 import { RouterLink } from 'vue-router';
 import Card from './Card.vue';
+import useUserStore from '@/stores/userStore.js';
+import { onMounted } from 'vue';
+
+const userStore = useUserStore();
+onMounted(()=>{
+  userStore.fillUserProps();
+});
 </script>
 
 
@@ -21,7 +28,7 @@ import Card from './Card.vue';
             </RouterLink>
           </Card>
 
-          <Card bg="bg-green-100">
+          <Card bg="bg-green-100" v-if="userStore.canAccessToPath('/jobs/add')">
             <h2 class="text-2xl font-bold">For Employers</h2>
             <p class="mt-2 mb-4">
               List your job to find the perfect developer for the role

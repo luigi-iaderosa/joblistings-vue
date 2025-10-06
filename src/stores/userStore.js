@@ -25,6 +25,7 @@ const useUserStore = defineStore('user', {
             //console.log(this,this.role,'hey');
             switch($path){
                 case '/jobs/add':
+                case '/jobs/edit':
                 case '/companies/add':
                     //return true;
                     return this.roles.filter((item) => item.id_role == 1).length > 0;

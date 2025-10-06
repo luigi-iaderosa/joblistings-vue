@@ -11,6 +11,7 @@ import EditCompanyView from '@/views/EditCompanyView.vue';
 import WelcomeView from '@/views/WelcomeView.vue';
 import AddCompanyView from '@/views/AddCompanyView.vue';
 import DeleteCompanyView from '@/views/DeleteCompanyView.vue';
+import ApplyToJobView from "@/views/ApplyToJobView.vue";
 const router = createRouter(
     {
         history: createWebHistory(import.meta.env.BASE_URL),
@@ -50,6 +51,11 @@ const router = createRouter(
                     path: '/jobs/delete/:id',
                     name: 'delete-job',
                     component: DeleteJob
+                },
+                {
+                    path: '/jobs/apply/:id',
+                    name: 'apply-to-job',
+                    component: ApplyToJobView
                 },
                 {
                     path: '/companies',
