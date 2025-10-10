@@ -11,6 +11,8 @@ import EditCompanyView from '@/views/EditCompanyView.vue';
 import WelcomeView from '@/views/WelcomeView.vue';
 import AddCompanyView from '@/views/AddCompanyView.vue';
 import DeleteCompanyView from '@/views/DeleteCompanyView.vue';
+import ApplyToJobView from "@/views/ApplyToJobView.vue";
+import SubscriptionsView from "@/views/SubscriptionsView.vue";
 const router = createRouter(
     {
         history: createWebHistory(import.meta.env.BASE_URL),
@@ -52,6 +54,11 @@ const router = createRouter(
                     component: DeleteJob
                 },
                 {
+                    path: '/jobs/apply/:id',
+                    name: 'apply-to-job',
+                    component: ApplyToJobView
+                },
+                {
                     path: '/companies',
                     name: 'companies',
                     component: CompaniesView
@@ -70,6 +77,11 @@ const router = createRouter(
                     path: '/companies/delete/:id',
                     name: 'delete-company',
                     component: DeleteCompanyView
+                },
+                {
+                    path: '/subscriptions',
+                    name: 'subscriptions',
+                    component: SubscriptionsView
                 },
                 {
                     path: '/:catchAll(.*)',

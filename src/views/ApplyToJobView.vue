@@ -10,12 +10,18 @@ import {useUserStore} from '@/stores/userStore';
 const id = ref('');
 
 const userStore = useUserStore();
-
+const form = reactive({
+  user_id:null,
+  job_id:null
+});
 const handleSubmit = async() => {
     const job = id.value;
     
-    const response = await axios.delete(API_LINK+'/jobs/'+job,{
-          headers: {'Authorization':'Bearer '+userStore.token}
+    form.job_id = job;
+    form.user_id = userStore.user_id;
+
+    const response = await axios.post(API_LINK+'/jobs/apply',form,{
+          headers: {'Authorization':'Bearer '+userStore.token},
         });
     //console.log(response);
     router.push('/jobs');
@@ -34,15 +40,15 @@ onMounted(()=>{
           class="bg-white px-6 py-8 mb-4 shadow-md rounded-md border m-4 md:m-0"
         >
           <form  @submit.prevent="handleSubmit">
-            <h2 class="text-3xl text-center font-semibold mb-6">Delete Job</h2>
+            <h2 class="text-3xl text-center font-semibold mb-6">Apply Job</h2>
 
-            <h3 class="text-2xl mb-5">Do you want to delete this job?</h3>
+            <h3 class="text-2xl mb-5">Do you want to apply for this job?</h3>
             <div>
               <button
                 class="bg-green-500 hover:bg-green-600 text-white text-center font-bold py-2 px-4 rounded-full w-full focus:outline-none focus:shadow-outline"
                 type="submit"
               >
-                Delete Now!
+                Apply Now!
               </button>
             </div>
           </form>

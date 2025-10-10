@@ -5,7 +5,7 @@
     import { reactive } from 'vue';
     import router from '@/router';
     import {API_LINK} from '@/plugins/Constants'
-    import useUserStore from '@/stores/userStore';
+    import {useUserStore} from '@/stores/userStore';
     const state = reactive({companies: []});
     
     const userStore = useUserStore();
@@ -19,7 +19,7 @@
         else {
             const response = await axios.get(API_LINK+'/companies',{headers: {'Authorization':'Bearer '+userStore.token}});
             state.companies = response.data.data;
-            console.log(state.companies);
+            //console.log(state.companies);
         }
         
     })

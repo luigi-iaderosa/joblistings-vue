@@ -5,7 +5,7 @@ import { RouterLink,useRoute } from 'vue-router';
 import axios from 'axios';
 import router from '@/router';
 import { API_LINK } from '@/plugins/Constants';
-import useUserStore from '@/stores/userStore';
+import {useUserStore} from '@/stores/userStore';
 
 
 const userStore = useUserStore();
@@ -107,16 +107,22 @@ onMounted(async ()=>{
             <!-- Manage -->
             <div class="bg-white p-6 rounded-lg shadow-md mt-6">
               <h3 class="text-xl font-bold mb-6">Manage Job</h3>
-              <RouterLink
+              <RouterLink v-if="userStore.canAccessToPath('/jobs/edit')"
                 :to="`/jobs/edit/${state.job.id_job}`"
                 class="bg-green-500 hover:bg-green-600 text-white text-center font-bold py-2 px-4 rounded-full w-full focus:outline-none focus:shadow-outline mt-4 block"
                 >Edit Job</RouterLink>
-              <RouterLink 
+              <RouterLink v-if="userStore.canAccessToPath('/jobs/edit')"
               :to="`/jobs/delete/${state.job.id_job}`"
                 class="bg-red-500 hover:bg-red-600 text-white text-center font-bold py-2 px-4 rounded-full w-full focus:outline-none focus:shadow-outline mt-4 block"
               >
                 Delete Job
               </RouterLink>
+              <RouterLink 
+                :to="`/jobs/apply/${state.job.id_job}`"
+                class="bg-green-500 hover:bg-green-600 text-white text-center font-bold py-2 px-4 rounded-full w-full focus:outline-none focus:shadow-outline mt-4 block"
+              >
+              Apply
+            </RouterLink>
             </div>
           </aside>
         </div>

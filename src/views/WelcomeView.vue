@@ -7,6 +7,7 @@ import { data } from 'autoprefixer';
 import router from '@/router';
 import eventBus from '@/eventBus';
 import { onMounted } from 'vue';
+import { useUserStore } from '@/stores/userStore';
 const state = reactive({
     email : null,
     password : null,
@@ -22,17 +23,23 @@ const handleSubmit = async ()=>{
     });
     if (state.isError == false) {
         const data = response.data;
-    if (data.access_token!= undefined){
-        localStorage.setItem('token', data.access_token);
-        localStorage.setItem('user',data.user.name);
-        localStorage.setItem('user_id',data.user.id);
-        
-        eventBus.emit('LoginOccurredEvent',data);
-        router.push('/');
-    }
-    else {
-        alert('Wrong login!!')
-    }
+        //console.log(data);
+        if (data.access_token!= undefined){
+            //console.log(data);
+            localStorage.setItem('token', data.access_token);
+            localStorage.setItem('user',data.user.name);
+            localStorage.setItem('user_id',data.user.id);
+            localStorage.setItem('roles',JSON.stringify(data.role));
+            //console.log(localStorage)
+            const userStore = useUserStore()
+            userStore.fillUserProps()
+            console.log(userStore.user_id,'userstore')
+            eventBus.emit('LoginOccurredEvent',data);
+            router.push('/');
+        }
+        else {
+            alert('Wrong login!!')
+        }
     }
     
     

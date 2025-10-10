@@ -5,7 +5,7 @@ import { reactive } from 'vue';
 import { useRoute } from 'vue-router';
 import router from '@/router';
 import { API_LINK } from '@/plugins/Constants';
-import useUserStore from '@/stores/userStore';
+import {useUserStore} from '@/stores/userStore';
 const state = reactive({
     company : {},
     companyId : null
@@ -14,7 +14,7 @@ const state = reactive({
 const userStore = useUserStore();
 
 state.companyId = useRoute().params.id;
-console.log(state.companyId);
+//console.log(state.companyId);
 
 onMounted(async () => {
     userStore.fillUserProps();
