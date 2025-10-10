@@ -1,13 +1,12 @@
 <script setup>
 import { RouterLink } from 'vue-router';
 import Card from './Card.vue';
-import useUserStore from '@/stores/userStore.js';
 import { onMounted } from 'vue';
-
+import { useUserStore } from '@/stores/userStore';
 const userStore = useUserStore();
-onMounted(()=>{
-  userStore.fillUserProps();
-});
+
+
+
 </script>
 
 

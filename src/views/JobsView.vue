@@ -3,7 +3,7 @@ import JobListings from '@/components/JobListings.vue';
 import { onMounted } from 'vue';
 import { reactive } from 'vue';
 import router from '@/router';
-import useUserStore from '@/stores/userStore';
+import {useUserStore} from '@/stores/userStore';
 
 const userStore = useUserStore();
 

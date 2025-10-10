@@ -1,5 +1,5 @@
 import {defineStore} from 'pinia';
-const useUserStore = defineStore('user', {
+export const useUserStore = defineStore('user', {
     state: () => ({
         user_id : null,
         user_name: null,
@@ -13,7 +13,6 @@ const useUserStore = defineStore('user', {
             this.user_name = localStorage.getItem('user');
             this.token = localStorage.getItem('token');
             this.roles = JSON.parse(localStorage.getItem('roles'));
-            console.log(localStorage);
             if (this.user_id!=null){
                 this.authorized = true;
             }
@@ -29,11 +28,19 @@ const useUserStore = defineStore('user', {
                 case '/companies/add':
                     //return true;
                     return this.roles.filter((item) => item.id_role == 1).length > 0;
-                
+                case '/subscriptions':
+                    return this.roles.filter((item) => item.id_role == 3).length > 0;
                 default:
                     return false;
             }
+        },
+        emptyUserProps(){
+            this.user_id = null
+            this.user_name = null
+            this.token = null
+            this.roles = null
+            this.authorized = false
         }
     },
   });
-  export default useUserStore;
+  

@@ -6,7 +6,7 @@ import { onMounted } from 'vue';
 import { ref } from 'vue';
 import { reactive } from 'vue';
 import { API_LINK } from '@/plugins/Constants';
-import useUserStore from '@/stores/userStore';
+import {useUserStore} from '@/stores/userStore';
 const id = ref('');
 
 const userStore = useUserStore();
@@ -23,7 +23,7 @@ const handleSubmit = async() => {
     const response = await axios.post(API_LINK+'/jobs/apply',form,{
           headers: {'Authorization':'Bearer '+userStore.token},
         });
-    console.log(response);
+    //console.log(response);
     router.push('/jobs');
 }
 

@@ -2,20 +2,23 @@
 import Hero from '@/components/Hero.vue';
 import HomeCards from '@/components/HomeCards.vue';
 import JobListings from '@/components/JobListings.vue';
-import { onMounted } from 'vue';
+import { onBeforeMount, onMounted } from 'vue';
 import router from '@/router';
 import { reactive } from 'vue';
-import useUserStore from '@/stores/userStore.js'
+import {useUserStore} from '@/stores/userStore.js'
 
 const userStore = useUserStore();
 
-onMounted(()=>{
+onBeforeMount(
+()=>{
     userStore.fillUserProps()
+    console.log(userStore.authorized,'from home')
     if (userStore.authorized==false){
         router.push('/welcome');
     }
-    
 });
+
+
 
 </script>
 

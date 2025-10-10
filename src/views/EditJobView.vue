@@ -7,7 +7,7 @@ import { onMounted } from 'vue';
 import { ref } from 'vue';
 import { useToast } from 'vue-toastification';
 import { API_LINK } from '@/plugins/Constants';
-import useUserStore from '@/stores/userStore';
+import {useUserStore} from '@/stores/userStore';
 
 
 const form = reactive({
@@ -54,7 +54,7 @@ const handleSubmit = async () => {
         const response = axios.put(API_LINK+'/jobs/'+id.value,formInject,{headers: {'Authorization':'Bearer '+userStore.token}});
         const toast = useToast();
         toast.success('Job has been overwritten! Yay!');
-        console.log(response);
+        //console.log(response);
         router.push(`/jobs/${id.value}`);
 
     }
@@ -74,7 +74,7 @@ onMounted(async () => {
     form.location = data.location;
     const companiesResponse = await axios.get(API_LINK+'/companies',{headers: {'Authorization':'Bearer '+userStore.token}}); // ricorda: i backtick rendono la stringa "evaluable as javascript"!
     companies.data = companiesResponse.data.data;
-    console.log(companies.data)
+    //console.log(companies.data)
 });
 
 </script>

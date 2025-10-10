@@ -5,7 +5,7 @@ import { RouterLink,useRoute } from 'vue-router';
 import axios from 'axios';
 import router from '@/router';
 import { API_LINK } from '@/plugins/Constants';
-import useUserStore from '@/stores/userStore';
+import {useUserStore} from '@/stores/userStore';
 
 
 const userStore = useUserStore();

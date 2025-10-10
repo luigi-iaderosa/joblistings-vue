@@ -4,7 +4,7 @@ import axios from 'axios';
 import { API_LINK } from '@/plugins/Constants';
 import router from '@/router';
 import { onMounted } from 'vue';
-import useUserStore from '@/stores/userStore';
+import {useUserStore} from '@/stores/userStore';
 const form = new reactive({
     name:null,
     description:null,

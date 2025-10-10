@@ -6,7 +6,7 @@
     import { onMounted } from 'vue';
     import PulseLoader from 'vue-spinner/src/PulseLoader.vue';
     import {API_LINK} from '@/plugins/Constants'
-    import useUserStore from '@/stores/userStore.js'
+    import {useUserStore} from '@/stores/userStore.js'
     defineProps({
         limit: {
             type: Number
@@ -53,7 +53,7 @@ onMounted(async ()=>{
     else {
         try {
             const response = await axios.get(API_LINK+'/jobs',{headers: {'Authorization':'Bearer '+userStore.token}});
-            console.log(response.data.data);
+            //console.log(response.data.data);
             state.jobs = response.data.data
             state.isLoading = false;
         }

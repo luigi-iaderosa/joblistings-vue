@@ -6,29 +6,20 @@ import { onMounted } from 'vue';
 import { reactive } from 'vue';
 import router from '@/router';
 import eventBus from '@/eventBus';
-import useUserStore from '@/stores/userStore.js';
-
+import { useUserStore } from '@/stores/userStore';
 const isActiveLink = (routePath) => {
-  console.log()
   return useRoute().path === routePath;
 }
 
+/*
 const fillUserProps = () => {
   userStore.fillUserProps();
 }
-
+*/
 const userStore = useUserStore();
-onMounted(()=>{
-  userStore.fillUserProps();
-  eventBus.on('LoginOccurredEvent',fillUserProps)
-  eventBus.on('LogoutOccurredEvent',fillUserProps)
-});
 
 const logout = () => {
-  localStorage.removeItem('user_id');
-  localStorage.removeItem('user');
-  localStorage.removeItem('token');
-  eventBus.emit('LogoutOccurredEvent');
+  userStore.emptyUserProps()
   router.push('/welcome');
 }
 </script>
@@ -47,7 +38,7 @@ const logout = () => {
                 >Vue Jobs</span>
             </RouterLink>
             
-            <div v-if="userStore.authorized==true" class="md:ml-auto">
+            <div v-if="userStore?.authorized==true" class="md:ml-auto">
               <div class="flex space-x-2">
                 <RouterLink
                   to="/"
@@ -65,6 +56,11 @@ const logout = () => {
                     to="/companies/add"
                     :class= "[isActiveLink('/companies/add')?'bg-green-900': 'hover:bg-gray-900 hover:text-white', 'text-white','rounded-md', 'px-3', 'py-2']"
                   >Add Company</RouterLink>
+          
+                  <RouterLink  v-if="userStore.canAccessToPath('/subscriptions')"
+                    to="/subscriptions"
+                    :class= "[isActiveLink('/subscriptions')?'bg-green-900': 'hover:bg-gray-900 hover:text-white', 'text-white','rounded-md', 'px-3', 'py-2']">Your subscriptions</RouterLink>
+          
                   <RouterLink
                     to="/companies"
                     :class= "[isActiveLink('/companies')?'bg-green-900': 'hover:bg-gray-900 hover:text-white', 'text-white','rounded-md', 'px-3', 'py-2']"

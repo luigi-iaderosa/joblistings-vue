@@ -6,7 +6,7 @@ import { useRoute } from 'vue-router';
 import {useToast} from 'vue-toastification';
 import { onMounted } from 'vue';
 import { API_LINK } from '@/plugins/Constants';
-import useUserStore from '@/stores/userStore';
+import {useUserStore} from '@/stores/userStore';
 const form = reactive({
     type: 'Remote',
     name: '',
