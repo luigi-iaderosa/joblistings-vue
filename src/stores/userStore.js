@@ -5,14 +5,16 @@ export const useUserStore = defineStore('user', {
         user_name: null,
         token: null,
         authorized: false,
-        role: null
+        role:  null
     }),
     actions: {
       fillUserProps() {
             this.user_id = localStorage.getItem('user_id');
             this.user_name = localStorage.getItem('user');
             this.token = localStorage.getItem('token');
-            this.roles = JSON.parse(localStorage.getItem('roles'));
+            if (! localStorage.getItem('roles') == '[object Object]'){
+                this.roles = JSON.parse(localStorage.getItem('roles'));
+            }
             if (this.user_id!=null){
                 this.authorized = true;
             }
@@ -21,6 +23,9 @@ export const useUserStore = defineStore('user', {
             }
         },
         canAccessToPath($path){
+            if (this.roles==undefined){
+                return false;
+            }
             //console.log(this,this.role,'hey');
             switch($path){
                 case '/jobs/add':
