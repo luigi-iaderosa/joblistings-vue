@@ -12,9 +12,7 @@ export const useUserStore = defineStore('user', {
             this.user_id = localStorage.getItem('user_id');
             this.user_name = localStorage.getItem('user');
             this.token = localStorage.getItem('token');
-            if (! localStorage.getItem('roles') == '[object Object]'){
-                this.roles = JSON.parse(localStorage.getItem('roles'));
-            }
+            this.roles = JSON.parse(localStorage.getItem('roles'));
             if (this.user_id!=null){
                 this.authorized = true;
             }

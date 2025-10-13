@@ -22,6 +22,10 @@ const logout = () => {
   userStore.emptyUserProps()
   router.push('/welcome');
 }
+
+onMounted(function(){
+  console.log('navbar on mounted',userStore);
+});
 </script>
 
 <template>
