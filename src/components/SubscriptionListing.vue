@@ -5,7 +5,10 @@ import axios from 'axios';
 //import { router } from 'json-server';
 import router from '@/router';
 import { onMounted } from 'vue';
+import { FwbButton, FwbModal } from 'flowbite-vue'
+import { ref } from 'vue';
 const userStore = useUserStore();
+const isShowModal = ref(false)
 const props = defineProps(
     {
         subscription:{
@@ -22,7 +25,13 @@ async function unsubscribe(){
     router.push('/');
 }
 
+function showModal() {
+    isShowModal.value = true;
+}
 
+function closeModal(){
+    isShowModal.value = false;
+}
 
 
 </script>
@@ -58,7 +67,42 @@ async function unsubscribe(){
                 class="bg-red-500 hover:bg-red-600 text-white text-center font-bold py-2 px-4 rounded-full w-full focus:outline-none focus:shadow-outline mt-4 block"
                 >
                 Remove Subscription</button>
-              
+                <fwb-button @click="showModal"
+                class="bg-blue-500 hover:bg-blue-600 text-white text-center font-bold py-2 px-4 rounded-full w-full focus:outline-none focus:shadow-outline mt-4 block"
+                >See Status</fwb-button>
     </div>
+
+
 </section>
+<fwb-modal  v-if="isShowModal" @close="closeModal">
+    <template  #header>
+      <div class="flex items-center text-white text-lg modal-header">
+        Status
+      </div>
+    </template>
+    <template #body>
+
+      <p  v-if="subscription.status == 0" class="text-base leading-relaxed modal-content">
+        Your subscription is under scrutiny
+      </p>
+      <p  v-if="subscription.status == 1" class="text-base leading-relaxed modal-content">
+        Your subscription has been positively evaluated and an interview is on the way!
+      </p>
+      <p  v-if="subscription.status == 2" class="text-base leading-relaxed modal-content">
+        Your subscription has been rejected. It might as well be their loss!! Keep pushing!
+      </p>
+    </template>
+  </fwb-modal>
 </template>
+
+
+<style scoped>
+
+
+::v-deep(.border-b) {
+  background-color: #3b82f6;
+}
+::v-deep(.p-6) {
+  background-color: white;
+}
+</style>
