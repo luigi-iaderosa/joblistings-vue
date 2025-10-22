@@ -7,12 +7,12 @@ import router from '@/router'; //importante: non specifichiamo il file in cui c'
 import Toast from 'vue-toastification';
 import 'vue-toastification/dist/index.css';
 import {useUserStore} from './stores/userStore';
-
+import PrimeVue from "primevue/config";
 const app = createApp(App);
 app.use(router);
 app.use(Toast);
 const pinia = createPinia()
 app.use(pinia)
-
+app.use(PrimeVue, { unstyled: true });
 app.mount('#app')
 

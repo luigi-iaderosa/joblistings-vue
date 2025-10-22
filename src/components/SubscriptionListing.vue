@@ -5,15 +5,16 @@ import axios from 'axios';
 //import { router } from 'json-server';
 import router from '@/router';
 import { onMounted } from 'vue';
-import { FwbButton, FwbModal } from 'flowbite-vue'
 import { ref } from 'vue';
 const userStore = useUserStore();
+import { Button } from 'primevue';
+import Dialog from 'primevue/dialog';
 const isShowModal = ref(false)
 const props = defineProps(
     {
         subscription:{
             type: Object
-        },
+        }
     });
 
 async function unsubscribe(){
@@ -67,42 +68,55 @@ function closeModal(){
                 class="bg-red-500 hover:bg-red-600 text-white text-center font-bold py-2 px-4 rounded-full w-full focus:outline-none focus:shadow-outline mt-4 block"
                 >
                 Remove Subscription</button>
-                <fwb-button @click="showModal"
+                <Button @click="isShowModal = true"
+                label="See Status"
                 class="bg-blue-500 hover:bg-blue-600 text-white text-center font-bold py-2 px-4 rounded-full w-full focus:outline-none focus:shadow-outline mt-4 block"
-                >See Status</fwb-button>
+                
+                />
     </div>
-
+    <Dialog v-model:visible="isShowModal" :closable="false" modal :pt="{
+        header: {
+            class: 'bg-blue-500 text-white flex justify-center items-center'
+        },
+        content: {
+            class: 'bg-white text-gray-800 p-6'
+        },
+        footer: {
+            class: 'bg-gray-50 border-t border-gray-200 flex justify-end p-4'
+        },
+        mask: { class: 'bg-black/40 backdrop-blur-sm' }
+       
+       
+        
+  }">
+        
+         <template #header>
+            <div class="inline-flex items-center justify-center gap-2">
+                <span class="font-bold whitespace-nowrap">Status</span>
+            </div>
+        </template>
+        <template #closeicon>
+                <!-- Empty = removes it -->
+        </template>
+        <div class="flex items-center gap-4 mb-4">
+            <p  v-if="subscription.status == 0" class="text-base leading-relaxed modal-content">
+                Your subscription is under scrutiny
+            </p>
+            <p  v-if="subscription.status == 1" class="text-base leading-relaxed modal-content">
+                Your subscription has been positively evaluated and an interview is on the way!
+            </p>
+            <p  v-if="subscription.status == 2" class="text-base leading-relaxed modal-content">
+                Your subscription has been rejected. It might as well be their loss!! Keep pushing!
+            </p>
+        </div>
+        <div class="flex justify-end gap-2 bg-white">
+            <Button type="button"  label="Close" @click="isShowModal = false"></Button>
+        </div>
+    </Dialog>
 
 </section>
-<fwb-modal  v-if="isShowModal" @close="closeModal">
-    <template  #header>
-      <div class="flex items-center text-white text-lg modal-header">
-        Status
-      </div>
-    </template>
-    <template #body>
 
-      <p  v-if="subscription.status == 0" class="text-base leading-relaxed modal-content">
-        Your subscription is under scrutiny
-      </p>
-      <p  v-if="subscription.status == 1" class="text-base leading-relaxed modal-content">
-        Your subscription has been positively evaluated and an interview is on the way!
-      </p>
-      <p  v-if="subscription.status == 2" class="text-base leading-relaxed modal-content">
-        Your subscription has been rejected. It might as well be their loss!! Keep pushing!
-      </p>
-    </template>
-  </fwb-modal>
 </template>
-
-
 <style scoped>
 
-
-::v-deep(.border-b) {
-  background-color: #3b82f6;
-}
-::v-deep(.p-6) {
-  background-color: white;
-}
 </style>
