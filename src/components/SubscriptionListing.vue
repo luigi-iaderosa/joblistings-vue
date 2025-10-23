@@ -10,6 +10,7 @@ const userStore = useUserStore();
 import { Button } from 'primevue';
 import Dialog from 'primevue/dialog';
 const isShowModal = ref(false)
+const removeRequestedSubscriptionShowModal = ref(false)
 const props = defineProps(
     {
         subscription:{
@@ -23,7 +24,8 @@ async function unsubscribe(){
             'Authorization': 'Bearer '+userStore.token
         }
     });
-    router.push('/');
+    removeRequestedSubscriptionShowModal.value = false
+    window.location.reload()
 }
 
 function showModal() {
@@ -33,7 +35,6 @@ function showModal() {
 function closeModal(){
     isShowModal.value = false;
 }
-
 
 </script>
 
@@ -64,16 +65,17 @@ function closeModal(){
                 :to="`/jobs/${subscription.job_plus.id_job}`"
                 class="bg-green-500 hover:bg-green-600 text-white text-center font-bold py-2 px-4 rounded-full w-full focus:outline-none focus:shadow-outline mt-4 block"
                 >See Detail</RouterLink>
-                <button @click="unsubscribe"
+                <Button @click="removeRequestedSubscriptionShowModal = true"
                 class="bg-red-500 hover:bg-red-600 text-white text-center font-bold py-2 px-4 rounded-full w-full focus:outline-none focus:shadow-outline mt-4 block"
                 >
-                Remove Subscription</button>
+                Remove Subscription</Button>
                 <Button @click="isShowModal = true"
                 label="See Status"
                 class="bg-blue-500 hover:bg-blue-600 text-white text-center font-bold py-2 px-4 rounded-full w-full focus:outline-none focus:shadow-outline mt-4 block"
                 
                 />
     </div>
+
     <Dialog v-model:visible="isShowModal" :closable="false" modal :pt="{
         header: {
             class: 'bg-blue-500 text-white flex justify-center items-center'
@@ -113,6 +115,40 @@ function closeModal(){
             <Button type="button"  label="Close" @click="isShowModal = false"></Button>
         </div>
     </Dialog>
+
+    <Dialog v-model:visible="removeRequestedSubscriptionShowModal" :closable="false" modal :pt="{
+        header: {
+            class: 'bg-red-500 text-white flex justify-center items-center'
+        },
+        content: {
+            class: 'bg-white text-gray-800 p-6'
+        },
+        footer: {
+            class: 'bg-gray-50 border-t border-gray-200 flex justify-end p-4'
+        },
+        mask: { class: 'bg-black/40 backdrop-blur-sm' }
+       
+       
+        
+  }">
+        <template #header>
+        <div class="inline-flex items-center justify-center gap-2">
+                <span class="font-bold whitespace-nowrap">Remove Subscription</span>
+            </div>
+        </template>
+        <div class="flex items-center gap-4 mb-4">
+            <p class="text-base leading-relaxed modal-content">
+               Are you sure you want to withdraw your subscription from this job opportunity? 
+            </p>
+            
+        </div>
+        <div class="flex justify-end gap-2 bg-white">
+            <Button type="button" class = "bg-green-500 hover:bg-green-700 text-white rounded-full py-2 px-4" label="Yes" @click="unsubscribe"></Button>
+            <Button type="button"  label="Close" @click="removeRequestedSubscriptionShowModal = false"></Button>
+        </div>
+</Dialog>
+
+
 
 </section>
 
