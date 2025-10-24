@@ -26,6 +26,10 @@ export const useUserStore = defineStore('user', {
             }
             //console.log(this,this.role,'hey');
             switch($path){
+                case '/jobs/subscriptions':
+                    return this.roles.filter((item) => item.id_role == 1).length > 0;  
+                case '/jobs/apply':
+                    return this.roles.filter((item) => item.id_role == 3).length > 0;
                 case '/jobs/add':
                 case '/jobs/edit':
                 case '/companies/add':
