@@ -10,7 +10,7 @@ const props = defineProps(
         },
     });
 
-
+import { useUserStore } from '@/stores/userStore';
 const handleDeletion = async () => {
     const response = await axios.delete('http://localhost:9001/companies/'+props.company.id);
     
@@ -18,7 +18,7 @@ const handleDeletion = async () => {
     window.location.reload();
 }
 
-
+const userStore = useUserStore();
 </script>
 
 
@@ -46,7 +46,7 @@ const handleDeletion = async () => {
 
         <p class="my-2 bg-green-100 p-2 font-bold">{{ company.contact_phone  }}</p>
     </div>
-    <div class="bg-white p-6 rounded-lg shadow-md mt-6">
+    <div class="bg-white p-6 rounded-lg shadow-md mt-6" v-if="userStore.canAccessToPath('/companies/edit')">
               <h3 class="text-xl font-bold mb-6">Manage Company</h3>
               <RouterLink
                 :to="`/companies/edit/${props.company.id_company}`"
