@@ -117,11 +117,17 @@ onMounted(async ()=>{
               >
                 Delete Job
               </RouterLink>
-              <RouterLink 
+              <RouterLink v-if="userStore.canAccessToPath('/jobs/apply')"
                 :to="`/jobs/apply/${state.job.id_job}`"
                 class="bg-green-500 hover:bg-green-600 text-white text-center font-bold py-2 px-4 rounded-full w-full focus:outline-none focus:shadow-outline mt-4 block"
               >
               Apply
+            </RouterLink>
+            <RouterLink v-if="userStore.canAccessToPath('/jobs/subscriptions')"
+                :to="`/jobs/subscriptions/${state.job.id_job}`"
+                class="bg-green-500 hover:bg-green-600 text-white text-center font-bold py-2 px-4 rounded-full w-full focus:outline-none focus:shadow-outline mt-4 block"
+              >
+              View subscriptions
             </RouterLink>
             </div>
           </aside>

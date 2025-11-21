@@ -15,6 +15,7 @@ import ApplyToJobView from "@/views/ApplyToJobView.vue";
 import SubscriptionsView from "@/views/SubscriptionsView.vue";
 import JobSearchListings from "@/components/JobSearchListings.vue";
 import JobsSearchView from "@/views/JobsSearchView.vue";
+import JobSubscriptionsView from "@/views/JobSubscriptionsView.vue"
 const router = createRouter(
     {
         history: createWebHistory(import.meta.env.BASE_URL),
@@ -64,6 +65,11 @@ const router = createRouter(
                     path: '/jobs/apply/:id',
                     name: 'apply-to-job',
                     component: ApplyToJobView
+                },
+                {
+                    path: '/jobs/subscriptions/:id',
+                    name: 'job-subscriptions',
+                    component: JobSubscriptionsView
                 },
                 {
                     path: '/companies',
