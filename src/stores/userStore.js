@@ -31,6 +31,8 @@ export const useUserStore = defineStore('user', {
                 case '/companies/add':
                     //return true;
                     return this.roles.filter((item) => item.id_role == 1).length > 0;
+                case '/jobs/search':
+                    return this.roles.filter((item)=> item.id_role == 3).length > 0;
                 case '/subscriptions':
                     return this.roles.filter((item) => item.id_role == 3).length > 0;
                 default:

@@ -13,6 +13,8 @@ import AddCompanyView from '@/views/AddCompanyView.vue';
 import DeleteCompanyView from '@/views/DeleteCompanyView.vue';
 import ApplyToJobView from "@/views/ApplyToJobView.vue";
 import SubscriptionsView from "@/views/SubscriptionsView.vue";
+import JobSearchListings from "@/components/JobSearchListings.vue";
+import JobsSearchView from "@/views/JobsSearchView.vue";
 const router = createRouter(
     {
         history: createWebHistory(import.meta.env.BASE_URL),
@@ -31,6 +33,11 @@ const router = createRouter(
                     path: '/jobs',
                     name: 'jobs',
                     component: JobsView
+                },
+                {
+                    path: '/jobs/search',
+                    name: 'jobs-search',
+                    component: JobsSearchView
                 },
                 {
                     path: '/jobs/:id',
